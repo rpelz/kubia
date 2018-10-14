@@ -1,0 +1,10 @@
+{
+  "name": "kubia",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "cross-fetch": "^2.2.2",
+    "promise-polyfill": "^8.1.0"
+  }
+}

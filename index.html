@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <style>
+        .centered-element {
+            text-align:center;
+        }
+        .btn {
+            width: 100px;
+            height: 30px;
+            margin: 10px;
+            font-size: 15px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="centered-element">
+            <h1>Hello from kubia!</h1>
+            <h2>Request: <span id="request-number"></span></h2>
+            <h2>Response from server: <span id="response-server"></span></h2>
+            <p></p>
+            <button id="start-button" class="btn">Start</button><button id="stop-button" class="btn">Stop</button>
+    </div>
+
+<script src="node_modules/promise-polyfill/dist/polyfill.min.js"></script>
+<script src="node_modules/cross-fetch/dist/cross-fetch.js"></script>
+</body>
+<script>
+    function refreshLoop() {
+        var hostUrl = window.location.href;
+        return setInterval(function(){
+            fetch(hostUrl+'bing')
+            .then(res => {
+                if (res.status >= 400) {
+                throw new Error("Bad response from server");
+                }
+                return res.json();
+            })
+            .then(data => {
+                console.log(data);
+                document.querySelector('#request-number').textContent = data.request;
+                document.querySelector('#response-server').textContent = data.hostname;
+            })
+            .catch(err => {
+                console.error(err);
+            });
+        }, 1000);
+    }
+
+    function ready() {
+        //console.log('Hello world!');
+        var stopButton = document.querySelector('#stop-button');
+        var startButton = document.querySelector('#start-button');
+        var intervalId = refreshLoop();
+        startButton.disabled = true;
+        stopButton.onclick = function() {
+            clearInterval(intervalId);
+            startButton.disabled = false;
+            stopButton.disabled = true;
+        };
+        startButton.onclick = function() {
+            intervalId = refreshLoop();
+            startButton.disabled = true;
+            stopButton.disabled = false;
+        };
+    }
+    document.addEventListener('DOMContentLoaded', ready, false);
+</script>
+</html>
