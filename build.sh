@@ -1,11 +1,13 @@
-#! /bin/bash
+#!/usr/bin/env bash
 
-CONTAINER_NAME=kubia-test
+IMAGE_NAME=kubia
 PORT=8088
 
-docker build --rm -t kubia .
+CONTAINER_NAME=$IMAGE_NAME-test
 
-docker run --rm --name $CONTAINER_NAME -p $PORT:8080 -d kubia
+docker build --rm -t $IMAGE_NAME .
+
+docker run --rm --name $CONTAINER_NAME -p $PORT:8080 -d $IMAGE_NAME
 
 echo "Container runs on port:$PORT"
 
